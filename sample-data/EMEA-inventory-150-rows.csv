@@ -1,0 +1,151 @@
+part_id	part_name	category	depot	current_stock	reorder_threshold	daily_consumption_avg	supplier_lead_time_days	unit_cost_eur	last_restock_date
+ZBR-HS-002	Housing Shell MC3300	Housing	Amsterdam	118	86	11.8	10	72	5/11/2026
+ZBR-PH-002	Printhead ZT610	Printhead	Madrid	103	55	9.2	7	310	4/30/2026
+ZBR-AN-003	Antenna Module BT/NFC	Antenna	Brno	10	34	8.2	7	44	4/17/2026
+ZBR-BT-001	Battery Pack TC21	Battery	Milan	384	130	5.2	30	89	5/16/2026
+ZBR-RB-005	Wax/Resin Ribbon 600m	Consumable	Milan	66	38	2.4	28	28	4/30/2026
+ZBR-PH-004	Printhead ZT231	Printhead	Prague	144	52	4.4	14	175	5/26/2026
+ZBR-SC-005	Scanner Window MC3300	Scanner	Budapest	137	77	7.6	14	48	5/5/2026
+ZBR-HS-002	Housing Shell MC3300	Housing	London	18	40	6.2	7	72	4/12/2026
+ZBR-BT-001	Battery Pack TC21	Battery	Budapest	167	62	4.7	21	89	4/7/2026
+ZBR-DS-002	Display Assembly TC52	Display	DÃ¼sseldorf	71	27	1.6	21	155	5/7/2026
+ZBR-BT-004	Battery Pack ET40	Battery	DÃ¼sseldorf	15	8	1.1	10	78	4/21/2026
+ZBR-KP-001	Keypad Assembly MC3300	Keypad	Madrid	0	89	8.1	14	55	5/13/2026
+ZBR-RB-005	Wax/Resin Ribbon 600m	Consumable	Stockholm	113	81	5	18	28	5/4/2026
+ZBR-TR-002	Trigger Button TC21	Trigger	Brno	83	159	10.4	21	18	4/13/2026
+ZBR-BT-004	Battery Pack ET40	Battery	Amsterdam	240	123	10.6	18	78	3/27/2026
+ZBR-LB-001	Label Sensor ZT411	Sensor	Amsterdam	21	17	3.5	5	58	5/24/2026
+ZBR-TR-001	Trigger Assembly MC3300	Trigger	Budapest	90	30	11.4	3	28	3/30/2026
+ZBR-HS-002	Housing Shell MC3300	Housing	Madrid	56	97	3.7	28	72	3/28/2026
+ZBR-MB-002	Main Board TC52	PCB	London	65	32	10	5	480	5/4/2026
+ZBR-CR-001	Cradle Contacts TC21	Cradle	Amsterdam	46	48	4.5	21	35	5/20/2026
+ZBR-RB-001	Ribbon Cartridge 110mm	Consumable	Milan	255	159	11.5	14	18.5	4/1/2026
+ZBR-BT-006	Battery Pack MC2200	Battery	Prague	16	6	1.1	7	82	3/26/2026
+ZBR-KP-002	Keypad Overlay TC52	Keypad	Madrid	30	25	9.9	3	12	4/13/2026
+ZBR-HS-003	Housing Shell TC52	Housing	Warsaw	147	83	10.5	10	68	4/13/2026
+ZBR-SC-001	Scanner Window TC52	Scanner	Milan	103	53	3.8	21	42	3/26/2026
+ZBR-MB-002	Main Board TC52	PCB	DÃ¼sseldorf	114	187	9.3	28	480	4/24/2026
+ZBR-CR-001	Cradle Contacts TC21	Cradle	Stockholm	28	16	5.7	5	35	4/15/2026
+ZBR-DS-004	Display Assembly MC2200	Display	Prague	67	41	10.9	7	128	4/26/2026
+ZBR-RB-003	Wax Ribbon 450m	Consumable	London	44	78	9.1	10	22	4/18/2026
+ZBR-MB-001	Main Board MC3300	PCB	Warsaw	40	30	8	5	520	4/12/2026
+ZBR-PL-001	Platen Roller ZD621	Roller	Prague	79	68	10.4	7	125	5/13/2026
+ZBR-MB-003	Main Board ZT411	PCB	Amsterdam	0	69	3	28	410	4/3/2026
+ZBR-HS-001	Housing Shell TC21	Housing	Stockholm	29	32	2.1	30	65	5/24/2026
+ZBR-MB-002	Main Board TC52	PCB	Amsterdam	0	80	5.7	21	480	4/2/2026
+ZBR-SP-001	Speaker Module TC52	Audio	London	233	86	5.3	18	22	5/28/2026
+ZBR-SC-001	Scanner Window TC52	Scanner	Warsaw	44	166	11.1	18	42	4/27/2026
+ZBR-PL-003	Platen Roller ZT610	Roller	Amsterdam	184	68	10.8	10	155	6/4/2026
+ZBR-FL-001	Flex Cable ZT230	Cable	Stockholm	97	49	3.4	28	15	4/14/2026
+ZBR-HS-003	Housing Shell TC52	Housing	Stockholm	197	95	4	28	68	4/16/2026
+ZBR-MB-002	Main Board TC52	PCB	Budapest	29	16	2.3	10	480	4/22/2026
+ZBR-AN-002	Antenna Module WWAN	Antenna	Milan	302	106	7.6	14	62	5/24/2026
+ZBR-KP-002	Keypad Overlay TC52	Keypad	Budapest	108	114	6	21	12	5/31/2026
+ZBR-FL-002	Flex Cable TC52 LCD	Cable	Brno	340	123	9.2	21	28	4/12/2026
+ZBR-HS-003	Housing Shell TC52	Housing	Madrid	290	195	11.6	18	68	4/9/2026
+ZBR-FL-001	Flex Cable ZT230	Cable	Madrid	116	243	9	30	15	4/3/2026
+ZBR-MB-005	Main Board TC21	PCB	Madrid	29	172	7.2	30	350	5/11/2026
+ZBR-PH-003	Printhead ZD621	Printhead	Madrid	150	78	4.7	18	198	5/30/2026
+ZBR-PH-005	Printhead ZD421	Printhead	Amsterdam	26	19	10.1	3	160	4/25/2026
+ZBR-PS-001	Power Supply ZT411	Power	DÃ¼sseldorf	58	31	8.2	7	85	4/27/2026
+ZBR-SC-004	Scanner Engine SE4710	Scanner	Stockholm	298	131	5.6	28	145	4/9/2026
+ZBR-SC-003	Scanner Engine SE4770	Scanner	Madrid	71	35	9.7	7	165	4/5/2026
+ZBR-BT-006	Battery Pack MC2200	Battery	Amsterdam	40	15	10	3	82	5/2/2026
+ZBR-RB-001	Ribbon Cartridge 110mm	Consumable	DÃ¼sseldorf	399	135	10.5	14	18.5	5/10/2026
+ZBR-PL-002	Platen Roller ZT411	Roller	Brno	0	73	3.5	30	140	3/28/2026
+ZBR-FL-003	Flex Cable MC3300 Scan	Cable	Prague	0	73	6.6	18	32	5/27/2026
+ZBR-BT-001	Battery Pack TC21	Battery	Prague	192	85	5	28	89	5/28/2026
+ZBR-RB-003	Wax Ribbon 450m	Consumable	Milan	324	169	10.8	28	22	4/22/2026
+ZBR-PS-002	Power Supply ZT610	Power	Madrid	171	76	9.4	10	95	5/7/2026
+ZBR-SP-002	Microphone TC21	Audio	Prague	23	222	11.3	21	16	4/29/2026
+ZBR-MB-005	Main Board TC21	PCB	Budapest	35	13	2.9	7	350	5/19/2026
+ZBR-TR-001	Trigger Assembly MC3300	Trigger	London	21	9	5.6	3	28	4/14/2026
+ZBR-KP-002	Keypad Overlay TC52	Keypad	Prague	45	19	4	5	12	4/13/2026
+ZBR-DS-001	Display Assembly TC21	Display	Amsterdam	455	155	9.9	21	135	5/29/2026
+ZBR-PH-005	Printhead ZD421	Printhead	London	41	33	3.4	10	160	4/25/2026
+ZBR-LB-001	Label Sensor ZT411	Sensor	Stockholm	37	93	4.6	28	58	4/19/2026
+ZBR-TR-002	Trigger Button TC21	Trigger	Prague	28	15	4	7	18	3/26/2026
+ZBR-PS-001	Power Supply ZT411	Power	Budapest	216	135	7.7	28	85	4/6/2026
+ZBR-DS-001	Display Assembly TC21	Display	Brno	104	62	5.8	18	135	4/4/2026
+ZBR-FL-002	Flex Cable TC52 LCD	Cable	DÃ¼sseldorf	30	11	0.8	21	28	4/24/2026
+ZBR-SC-005	Scanner Window MC3300	Scanner	Warsaw	102	45	8.4	10	48	4/23/2026
+ZBR-KP-003	Keypad Assembly MC2200	Keypad	Madrid	202	171	7.5	28	48	5/9/2026
+ZBR-MB-004	Main Board ET40	PCB	Budapest	8	11	2.5	5	390	5/12/2026
+ZBR-PL-001	Platen Roller ZD621	Roller	Warsaw	89	210	11.1	21	125	5/1/2026
+ZBR-PL-001	Platen Roller ZD621	Roller	Madrid	0	141	6.8	21	125	5/16/2026
+ZBR-SP-001	Speaker Module TC52	Audio	Milan	341	124	8.3	28	22	5/25/2026
+ZBR-PL-002	Platen Roller ZT411	Roller	Prague	106	53	2.8	28	140	5/6/2026
+ZBR-SC-005	Scanner Window MC3300	Scanner	DÃ¼sseldorf	111	68	4.2	30	48	5/6/2026
+ZBR-AN-002	Antenna Module WWAN	Antenna	Warsaw	70	42	11.7	5	62	6/1/2026
+ZBR-FL-003	Flex Cable MC3300 Scan	Cable	Brno	109	44	10.1	7	32	5/21/2026
+ZBR-PL-003	Platen Roller ZT610	Roller	Prague	249	114	8.8	18	155	5/21/2026
+ZBR-PH-002	Printhead ZT610	Printhead	London	118	168	7.9	30	310	4/30/2026
+ZBR-SP-001	Speaker Module TC52	Audio	Budapest	12	18	1.3	21	22	4/18/2026
+ZBR-DS-004	Display Assembly MC2200	Display	London	81	91	9	14	128	4/27/2026
+ZBR-DS-003	Display Assembly ET40	Display	Prague	21	43	10.3	5	142	5/10/2026
+ZBR-PH-004	Printhead ZT231	Printhead	Madrid	91	200	7.7	30	175	4/6/2026
+ZBR-BT-005	Battery Pack TC73	Battery	London	14	7	1.6	5	105	5/1/2026
+ZBR-DS-004	Display Assembly MC2200	Display	Warsaw	266	133	7.3	21	128	6/1/2026
+ZBR-SP-002	Microphone TC21	Audio	Milan	6	15	3.9	5	16	5/16/2026
+ZBR-SC-002	Scanner Window TC21	Scanner	London	70	41	5.4	10	38	5/14/2026
+ZBR-SP-002	Microphone TC21	Audio	Warsaw	18	20	5.9	5	16	4/18/2026
+ZBR-LB-003	Gap Sensor ZT610	Sensor	Madrid	3	6	1.5	5	64	3/31/2026
+ZBR-BT-006	Battery Pack MC2200	Battery	Brno	520	228	8.9	30	82	6/3/2026
+ZBR-PH-006	Printhead ZT620	Printhead	DÃ¼sseldorf	23	89	3.2	30	340	5/21/2026
+ZBR-RB-002	Ribbon Cartridge 60mm	Consumable	Brno	84	31	1.2	28	14	3/28/2026
+ZBR-KP-003	Keypad Assembly MC2200	Keypad	London	196	67	6.7	14	48	5/20/2026
+ZBR-SC-002	Scanner Window TC21	Scanner	Milan	155	68	3.6	21	38	4/6/2026
+ZBR-PS-003	Power Supply Cradle TC	Power	Amsterdam	50	27	7	7	55	4/24/2026
+ZBR-PH-006	Printhead ZT620	Printhead	Madrid	16	18	5.2	5	340	4/6/2026
+ZBR-BT-004	Battery Pack ET40	Battery	Milan	23	10	3.9	5	78	3/24/2026
+ZBR-BT-002	Battery Pack TC52	Battery	Madrid	90	101	5.8	30	95	5/25/2026
+ZBR-BT-001	Battery Pack TC21	Battery	Madrid	11	39	1.4	30	89	5/5/2026
+ZBR-MB-004	Main Board ET40	PCB	Stockholm	104	136	6.5	21	390	4/23/2026
+ZBR-CR-002	Cradle Assembly TC52	Cradle	Milan	15	24	0.9	28	120	4/13/2026
+ZBR-MB-004	Main Board ET40	PCB	Warsaw	142	78	8.5	14	390	5/20/2026
+ZBR-RB-004	Resin Ribbon 300m	Consumable	Madrid	79	39	10.3	5	35	4/3/2026
+ZBR-BT-002	Battery Pack TC52	Battery	Brno	10	4	1	5	95	4/14/2026
+ZBR-RB-003	Wax Ribbon 450m	Consumable	Madrid	61	56	7.1	10	22	5/26/2026
+ZBR-PH-001	Printhead ZT411	Printhead	Brno	34	12	2.8	5	245	5/24/2026
+ZBR-CR-002	Cradle Assembly TC52	Cradle	Warsaw	41	47	11.3	5	120	6/1/2026
+ZBR-FL-001	Flex Cable ZT230	Cable	Brno	6	4	0.3	18	15	4/12/2026
+ZBR-BT-006	Battery Pack MC2200	Battery	Warsaw	16	10	5.3	3	82	4/20/2026
+ZBR-RB-004	Resin Ribbon 300m	Consumable	Prague	241	115	6.6	28	35	4/13/2026
+ZBR-PH-003	Printhead ZD621	Printhead	Warsaw	11	28	5.6	5	198	5/25/2026
+ZBR-AN-003	Antenna Module BT/NFC	Antenna	Warsaw	125	53	4.4	21	44	4/13/2026
+ZBR-FL-004	Flex Cable ZD621 Feed	Cable	Budapest	47	32	7.3	5	19	4/26/2026
+ZBR-SC-003	Scanner Engine SE4770	Scanner	Amsterdam	29	37	10.2	5	165	3/23/2026
+ZBR-SC-001	Scanner Window TC52	Scanner	Prague	71	44	2.5	21	42	3/24/2026
+ZBR-FL-001	Flex Cable ZT230	Cable	Milan	19	13	4.8	3	15	4/17/2026
+ZBR-KP-002	Keypad Overlay TC52	Keypad	Warsaw	24	11	1.2	14	12	4/14/2026
+ZBR-LB-001	Label Sensor ZT411	Sensor	Brno	3	4	2.7	3	58	5/4/2026
+ZBR-CR-002	Cradle Assembly TC52	Cradle	Amsterdam	208	211	10.6	30	120	5/7/2026
+ZBR-HS-003	Housing Shell TC52	Housing	Milan	10	50	9.6	7	68	5/19/2026
+ZBR-HS-002	Housing Shell MC3300	Housing	Stockholm	219	213	11.2	30	72	4/29/2026
+ZBR-BT-005	Battery Pack TC73	Battery	Stockholm	20	133	9.8	14	105	5/18/2026
+ZBR-PH-006	Printhead ZT620	Printhead	Warsaw	5	4	1.3	3	340	5/15/2026
+ZBR-SC-002	Scanner Window TC21	Scanner	Brno	24	30	1.2	30	38	4/23/2026
+ZBR-PS-003	Power Supply Cradle TC	Power	Budapest	0	29	5.1	10	55	3/27/2026
+ZBR-CR-001	Cradle Contacts TC21	Cradle	London	168	88	3.2	28	35	4/22/2026
+ZBR-AN-001	Antenna Module WLAN	Antenna	Budapest	169	88	9.4	14	48	5/25/2026
+ZBR-DS-002	Display Assembly TC52	Display	Amsterdam	0	171	6.4	28	155	4/27/2026
+ZBR-AN-001	Antenna Module WLAN	Antenna	London	255	171	8.7	21	48	5/26/2026
+ZBR-HS-001	Housing Shell TC21	Housing	Madrid	63	43	11.9	5	65	5/16/2026
+ZBR-DS-003	Display Assembly ET40	Display	Madrid	53	48	3	30	142	4/13/2026
+ZBR-DS-004	Display Assembly MC2200	Display	Madrid	39	51	4.9	14	128	4/9/2026
+ZBR-LB-002	Label Sensor ZD621	Sensor	Madrid	32	18	9.3	3	52	5/19/2026
+ZBR-RB-001	Ribbon Cartridge 110mm	Consumable	Budapest	63	25	4.6	7	18.5	6/4/2026
+ZBR-PH-005	Printhead ZD421	Printhead	Madrid	395	156	7.9	21	160	5/17/2026
+ZBR-CR-003	Charging Cradle 4-slot	Cradle	Madrid	215	72	4.8	18	185	4/12/2026
+ZBR-BT-003	Battery Pack MC3300	Battery	Stockholm	24	26	7.2	5	112	3/24/2026
+ZBR-PH-005	Printhead ZD421	Printhead	Warsaw	121	42	1.8	30	160	4/11/2026
+ZBR-RB-002	Ribbon Cartridge 60mm	Consumable	Budapest	158	92	10.6	14	14	3/24/2026
+ZBR-FL-003	Flex Cable MC3300 Scan	Cable	Budapest	0	30	11.5	3	32	5/4/2026
+ZBR-LB-002	Label Sensor ZD621	Sensor	Stockholm	0	61	6.7	10	52	5/6/2026
+ZBR-MB-003	Main Board ZT411	PCB	Stockholm	57	35	11.4	5	410	3/25/2026
+ZBR-BT-003	Battery Pack MC3300	Battery	Madrid	70	33	3.9	14	112	5/5/2026
+ZBR-FL-004	Flex Cable ZD621 Feed	Cable	Warsaw	12	14	2.5	10	19	5/20/2026
+ZBR-KP-001	Keypad Assembly MC3300	Keypad	Brno	189	169	6.3	28	55	4/10/2026
+ZBR-DS-002	Display Assembly TC52	Display	Prague	39	131	11.9	14	155	5/23/2026
+ZBR-MB-003	Main Board ZT411	PCB	Brno	48	31	9.6	5	410	5/4/2026
+ZBR-PL-002	Platen Roller ZT411	Roller	Milan	9	3	0.5	10	140	5/27/2026
