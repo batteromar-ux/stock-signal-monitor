@@ -4,7 +4,7 @@ AI-powered spare parts inventory monitoring for EMEA depot operations. Reads 150
 
 Built with [n8n](https://n8n.io) · [Claude AI](https://anthropic.com) · Google Sheets · Gmail
 
-(screenshots/workflow-canvas.png)
+![Email Output](screenshots/workflow-canvas.png)
 
 ## Live Demo
 
