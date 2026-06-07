@@ -1,0 +1,369 @@
+{
+  "name": "Stock Signal Monitor — Zebra Demo",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-6",
+          "cachedResultName": "Claude Sonnet 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 1000,
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.5,
+      "position": [
+        944,
+        -16
+      ],
+      "id": "b74cf047-1534-43df-a59b-bbde2f004761",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "mAbuRPr6xZ73LFuJ",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build HTML Email — takes LLM summary + raw alert data and produces a styled email\n\nconst llmText = $('AI Summary Generator').first().json.text || 'AI summary unavailable.';\nconst alertData = $('Calculate Stock Signals').first().json;\n\nconst {\n  report_date,\n  total_parts_monitored,\n  alerts_count,\n  healthy_count,\n  critical_count,\n  total_estimated_reorder_cost,\n  alerts,\n  depots_affected\n} = alertData;\n\n// Severity badge colors\nconst severityColors = {\n  STOCKOUT:  { bg: '#DC2626', text: '#FFFFFF' },\n  CRITICAL:  { bg: '#EA580C', text: '#FFFFFF' },\n  WARNING:   { bg: '#D97706', text: '#FFFFFF' },\n  WATCH:     { bg: '#2563EB', text: '#FFFFFF' },\n};\n\n// Build the alert table rows\nconst stockoutAndCritical = alerts.filter(a => a.severity === 'STOCKOUT' || a.severity === 'CRITICAL');\nconst warningAndWatch = alerts.filter(a => a.severity === 'WARNING' || a.severity === 'WATCH');\n\nfunction severityBadge(sev) {\n  const c = severityColors[sev] || { bg: '#6B7280', text: '#FFFFFF' };\n  return `<span style=\"display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;background:${c.bg};color:${c.text};\">${sev}</span>`;\n}\n\nfunction buildTableRows(items) {\n  return items.map(a => `\n    <tr style=\"border-bottom:1px solid #E5E7EB;\">\n      <td style=\"padding:8px 12px;font-size:13px;\">${severityBadge(a.severity)}</td>\n      <td style=\"padding:8px 12px;font-size:13px;font-weight:600;\">${a.part_id}</td>\n      <td style=\"padding:8px 12px;font-size:13px;\">${a.part_name}</td>\n      <td style=\"padding:8px 12px;font-size:13px;\">${a.depot}</td>\n      <td style=\"padding:8px 12px;font-size:13px;text-align:center;font-weight:700;color:${a.current_stock === 0 ? '#DC2626' : '#111'};\">${a.current_stock}</td>\n      <td style=\"padding:8px 12px;font-size:13px;text-align:center;\">${a.reorder_threshold}</td>\n      <td style=\"padding:8px 12px;font-size:13px;text-align:center;\">${a.days_of_stock_left === 999 ? '∞' : a.days_of_stock_left + 'd'}</td>\n      <td style=\"padding:8px 12px;font-size:13px;text-align:center;\">${a.supplier_lead_time_days}d</td>\n      <td style=\"padding:8px 12px;font-size:13px;text-align:right;\">${a.suggested_order_qty}</td>\n      <td style=\"padding:8px 12px;font-size:13px;text-align:right;\">€${a.estimated_order_cost_eur.toLocaleString()}</td>\n    </tr>\n  `).join('');\n}\n\n// Convert LLM text (may have markdown-style formatting) to basic HTML\nconst llmHtml = llmText\n  .replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>')\n  .replace(/^### (.*$)/gm, '<h4 style=\"margin:12px 0 4px 0;font-size:14px;color:#1F2937;\">$1</h4>')\n  .replace(/^## (.*$)/gm, '<h3 style=\"margin:16px 0 6px 0;font-size:16px;color:#1F2937;\">$1</h3>')\n  .replace(/^- (.*$)/gm, '<div style=\"padding:2px 0 2px 16px;font-size:13px;\">• $1</div>')\n  .replace(/^\\* (.*$)/gm, '<div style=\"padding:2px 0 2px 16px;font-size:13px;\">• $1</div>')\n  .replace(/\\n\\n/g, '<br><br>')\n  .replace(/\\n/g, '<br>');\n\nconst html = `\n<!DOCTYPE html>\n<html>\n<head><meta charset=\"utf-8\"></head>\n<body style=\"margin:0;padding:0;background:#F3F4F6;font-family:Arial,Helvetica,sans-serif;\">\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#F3F4F6;padding:24px 0;\">\n<tr><td align=\"center\">\n<table width=\"680\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#FFFFFF;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);\">\n\n  <!-- Header -->\n  <tr>\n    <td style=\"background:#1F2937;padding:20px 24px;\">\n      <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n        <tr>\n          <td>\n            <div style=\"font-size:20px;font-weight:700;color:#FFFFFF;letter-spacing:-0.3px;\">📦 Stock Signal Monitor</div>\n            <div style=\"font-size:12px;color:#9CA3AF;margin-top:4px;\">EMEA Equipment Maintenance • Zebra Technologies\n</div>\n          </td>\n          <td align=\"right\">\n            <div style=\"font-size:13px;color:#9CA3AF;\">${report_date}</div>\n          </td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n\n  <!-- KPI Cards -->\n  <tr>\n    <td style=\"padding:20px 24px 12px 24px;\">\n      <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n        <tr>\n          <td width=\"25%\" style=\"padding:0 4px;\">\n            <div style=\"background:#FEF2F2;border:1px solid #FECACA;border-radius:6px;padding:12px;text-align:center;\">\n              <div style=\"font-size:24px;font-weight:800;color:#DC2626;\">${critical_count}</div>\n              <div style=\"font-size:10px;font-weight:600;color:#991B1B;text-transform:uppercase;letter-spacing:0.5px;\">Critical / Stockout</div>\n            </div>\n          </td>\n          <td width=\"25%\" style=\"padding:0 4px;\">\n            <div style=\"background:#FFF7ED;border:1px solid #FED7AA;border-radius:6px;padding:12px;text-align:center;\">\n              <div style=\"font-size:24px;font-weight:800;color:#EA580C;\">${alerts_count - critical_count}</div>\n              <div style=\"font-size:10px;font-weight:600;color:#9A3412;text-transform:uppercase;letter-spacing:0.5px;\">Warning / Watch</div>\n            </div>\n          </td>\n          <td width=\"25%\" style=\"padding:0 4px;\">\n            <div style=\"background:#F0FDF4;border:1px solid #BBF7D0;border-radius:6px;padding:12px;text-align:center;\">\n              <div style=\"font-size:24px;font-weight:800;color:#16A34A;\">${healthy_count}</div>\n              <div style=\"font-size:10px;font-weight:600;color:#166534;text-transform:uppercase;letter-spacing:0.5px;\">Healthy</div>\n            </div>\n          </td>\n          <td width=\"25%\" style=\"padding:0 4px;\">\n            <div style=\"background:#F5F3FF;border:1px solid #DDD6FE;border-radius:6px;padding:12px;text-align:center;\">\n              <div style=\"font-size:24px;font-weight:800;color:#7C3AED;\">€${total_estimated_reorder_cost.toLocaleString()}</div>\n              <div style=\"font-size:10px;font-weight:600;color:#5B21B6;text-transform:uppercase;letter-spacing:0.5px;\">Est. Reorder Cost</div>\n            </div>\n          </td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n\n  <!-- Depot Tags -->\n  <tr>\n    <td style=\"padding:4px 24px 16px 24px;\">\n      <div style=\"font-size:11px;color:#6B7280;\">\n        <strong>Depots affected:</strong> ${depots_affected.map(d =>\n          `<span style=\"display:inline-block;background:#E5E7EB;padding:2px 8px;border-radius:3px;margin:2px;font-size:11px;\">${d}</span>`\n        ).join(' ')}\n      </div>\n    </td>\n  </tr>\n\n  <!-- Divider -->\n  <tr><td style=\"padding:0 24px;\"><div style=\"border-top:1px solid #E5E7EB;\"></div></td></tr>\n\n  <!-- AI Summary Section -->\n  <tr>\n    <td style=\"padding:16px 24px;\">\n      <div style=\"font-size:14px;font-weight:700;color:#1F2937;margin-bottom:8px;\">🤖 AI Analysis</div>\n      <div style=\"background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:16px;font-size:13px;line-height:1.6;color:#374151;\">\n        ${llmHtml}\n      </div>\n    </td>\n  </tr>\n\n  ${stockoutAndCritical.length > 0 ? `\n  <!-- Critical Actions Table -->\n  <tr>\n    <td style=\"padding:8px 24px 4px 24px;\">\n      <div style=\"font-size:14px;font-weight:700;color:#DC2626;margin-bottom:8px;\">🚨 Critical Actions Required (${stockoutAndCritical.length})</div>\n    </td>\n  </tr>\n  <tr>\n    <td style=\"padding:0 24px 16px 24px;\">\n      <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border:1px solid #FECACA;border-radius:6px;overflow:hidden;\">\n        <tr style=\"background:#FEF2F2;\">\n          <th style=\"padding:8px 12px;font-size:11px;text-align:left;color:#991B1B;font-weight:700;\">STATUS</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:left;color:#991B1B;font-weight:700;\">PART ID</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:left;color:#991B1B;font-weight:700;\">PART NAME</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:left;color:#991B1B;font-weight:700;\">DEPOT</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:center;color:#991B1B;font-weight:700;\">STOCK</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:center;color:#991B1B;font-weight:700;\">MIN</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:center;color:#991B1B;font-weight:700;\">DAYS LEFT</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:center;color:#991B1B;font-weight:700;\">LEAD TIME</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:right;color:#991B1B;font-weight:700;\">ORDER QTY</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:right;color:#991B1B;font-weight:700;\">EST. COST</th>\n        </tr>\n        ${buildTableRows(stockoutAndCritical)}\n      </table>\n    </td>\n  </tr>\n  ` : ''}\n\n  ${warningAndWatch.length > 0 ? `\n  <!-- Watch List Table -->\n  <tr>\n    <td style=\"padding:8px 24px 4px 24px;\">\n      <div style=\"font-size:14px;font-weight:700;color:#D97706;margin-bottom:8px;\">⚠️ Watch List (${warningAndWatch.length})</div>\n    </td>\n  </tr>\n  <tr>\n    <td style=\"padding:0 24px 16px 24px;\">\n      <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border:1px solid #FED7AA;border-radius:6px;overflow:hidden;\">\n        <tr style=\"background:#FFF7ED;\">\n          <th style=\"padding:8px 12px;font-size:11px;text-align:left;color:#9A3412;font-weight:700;\">STATUS</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:left;color:#9A3412;font-weight:700;\">PART ID</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:left;color:#9A3412;font-weight:700;\">PART NAME</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:left;color:#9A3412;font-weight:700;\">DEPOT</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:center;color:#9A3412;font-weight:700;\">STOCK</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:center;color:#9A3412;font-weight:700;\">MIN</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:center;color:#9A3412;font-weight:700;\">DAYS LEFT</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:center;color:#9A3412;font-weight:700;\">LEAD TIME</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:right;color:#9A3412;font-weight:700;\">ORDER QTY</th>\n          <th style=\"padding:8px 12px;font-size:11px;text-align:right;color:#9A3412;font-weight:700;\">EST. COST</th>\n        </tr>\n        ${buildTableRows(warningAndWatch)}\n      </table>\n    </td>\n  </tr>\n  ` : ''}\n\n  <!-- Footer -->\n  <tr>\n    <td style=\"padding:16px 24px;background:#F9FAFB;border-top:1px solid #E5E7EB;\">\n      <div style=\"font-size:11px;color:#9CA3AF;line-height:1.5;\">\n        Monitoring ${total_parts_monitored} parts across ${depots_affected.length} depot(s) • \n        ${healthy_count} parts within normal levels •\n        Generated by n8n AI Workflow •\n        <a href=\"#\" style=\"color:#6B7280;\">Unsubscribe</a>\n      </div>\n    </td>\n  </tr>\n\n</table>\n</td></tr>\n</table>\n</body>\n</html>\n`;\n\nreturn [{ json: { emailHtml: html, subject: `Stock Signal Alert — ${report_date} — ${alerts_count} items flagged (${critical_count} critical)` } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        -192
+      ],
+      "id": "7cbe905b-f137-45ae-a394-bd4a9d7ca8d5",
+      "name": "Build HTML Email"
+    },
+    {
+      "parameters": {
+        "formTitle": "Stock Signal Monitor for Zebra — Live Demo",
+        "formDescription": "Enter your email to receive a sample AI-powered stock signal report. Built by Omar-B with n8n.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Your Email Address",
+              "fieldType": "email",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        224,
+        -128
+      ],
+      "id": "e420c8f7-9e64-4d1a-b2d8-f21a8f61d5ac",
+      "name": "Demo Request Form",
+      "webhookId": "0b2a4498-27ac-49bd-baad-689b33190d2f"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Demo Request Form').first().json['Your Email Address'] }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.emailHtml }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1360,
+        -224
+      ],
+      "id": "5d7d85f6-15b5-47af-bf64-53ccb8070c14",
+      "name": "Send Demo Report",
+      "webhookId": "2121b9f8-dc6c-4222-8064-daaa1ec72285",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "sYokZ8hStWoPB9sT",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        768,
+        16
+      ],
+      "id": "a57c01e5-238f-4aa6-ae0e-35c0b2ed4aa4",
+      "name": "No Alerts — End"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1NlQrMn3V-WP5MdBnFq-nEc6Iu750_UscP3MP0o64ztQ/edit?gid=1823214923#gid=1823214923",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 96806378,
+          "mode": "list",
+          "cachedResultName": "ZEBRA \"STOCK\"",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NlQrMn3V-WP5MdBnFq-nEc6Iu750_UscP3MP0o64ztQ/edit#gid=96806378"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        64
+      ],
+      "id": "f1e0c0e0-a728-4932-8ab8-a7af8af2748f",
+      "name": "Read Inventory Data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7bMFggWXFktJOWSA",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Spare Parts Stock Signal Calculator\n// Processes inventory data and flags parts needing attention\n\nconst items = $input.all();\nconst today = new Date();\n\nconst alerts = [];\nconst healthy = [];\n\nfor (const item of items) {\n  const data = item.json;\n\n  // Parse numeric fields (Google Sheets returns strings)\n  const currentStock = parseFloat(data.current_stock) || 0;\n  const reorderThreshold = parseFloat(data.reorder_threshold) || 0;\n  const dailyConsumption = parseFloat(data.daily_consumption_avg) || 0;\n  const leadTimeDays = parseFloat(data.supplier_lead_time_days) || 0;\n  const unitCost = parseFloat(data.unit_cost_eur) || 0;\n\n  // Calculate derived metrics\n  const daysOfStockLeft = dailyConsumption > 0\n    ? Math.round(currentStock / dailyConsumption)\n    : 999; // If no consumption, effectively infinite\n\n  const stockCoversDuringLeadTime = daysOfStockLeft >= leadTimeDays;\n  const stockAboveThreshold = currentStock >= reorderThreshold;\n  const demandDuringLeadTime = Math.round(dailyConsumption * leadTimeDays);\n  const suggestedOrderQty = Math.max(0, reorderThreshold - currentStock + demandDuringLeadTime);\n  const estimatedOrderCost = Math.round(suggestedOrderQty * unitCost);\n\n  // Calculate days since last restock\n  const lastRestock = new Date(data.last_restock_date);\n  const daysSinceRestock = Math.round((today - lastRestock) / (1000 * 60 * 60 * 24));\n\n  // Determine severity\n  let severity = 'OK';\n  let reason = '';\n\n  if (currentStock <= 0) {\n    severity = 'STOCKOUT';\n    reason = 'No stock remaining — immediate action required';\n  } else if (!stockAboveThreshold && !stockCoversDuringLeadTime) {\n    severity = 'CRITICAL';\n    reason = `Below reorder threshold AND stock will run out before supplier can deliver (${daysOfStockLeft} days left vs ${leadTimeDays}-day lead time)`;\n  } else if (!stockAboveThreshold) {\n    severity = 'WARNING';\n    reason = `Below reorder threshold (${currentStock} vs ${reorderThreshold} minimum)`;\n  } else if (daysOfStockLeft <= leadTimeDays * 1.5) {\n    severity = 'WATCH';\n    reason = `Approaching reorder point — ${daysOfStockLeft} days of stock remaining`;\n  }\n\n  const enrichedPart = {\n    part_id: data.part_id,\n    part_name: data.part_name,\n    category: data.category,\n    depot: data.depot,\n    current_stock: currentStock,\n    reorder_threshold: reorderThreshold,\n    daily_consumption_avg: dailyConsumption,\n    days_of_stock_left: daysOfStockLeft,\n    supplier_lead_time_days: leadTimeDays,\n    stock_covers_lead_time: stockCoversDuringLeadTime,\n    severity: severity,\n    reason: reason,\n    suggested_order_qty: suggestedOrderQty,\n    estimated_order_cost_eur: estimatedOrderCost,\n    days_since_last_restock: daysSinceRestock,\n    unit_cost_eur: unitCost\n  };\n\n  if (severity !== 'OK') {\n    alerts.push(enrichedPart);\n  } else {\n    healthy.push(enrichedPart);\n  }\n}\n\n// Sort alerts: STOCKOUT first, then CRITICAL, then WARNING, then WATCH\nconst severityOrder = { 'STOCKOUT': 0, 'CRITICAL': 1, 'WARNING': 2, 'WATCH': 3 };\nalerts.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);\n\n// Build a summary object for the LLM prompt\nconst summary = {\n  report_date: today.toISOString().split('T')[0],\n  total_parts_monitored: items.length,\n  alerts_count: alerts.length,\n  healthy_count: healthy.length,\n  critical_count: alerts.filter(a => a.severity === 'CRITICAL' || a.severity === 'STOCKOUT').length,\n  total_estimated_reorder_cost: alerts.reduce((sum, a) => sum + a.estimated_order_cost_eur, 0),\n  alerts: alerts,\n  depots_affected: [...new Set(alerts.map(a => a.depot))]\n};\n\nreturn [{ json: summary }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        -96
+      ],
+      "id": "c51b9bd2-875d-4166-8657-840f9bad1485",
+      "name": "Calculate Stock Signals"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "dff63635-79a3-44b3-884b-134ddabe879c",
+              "leftValue": "={{ $json.alerts_count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "17f1a6ff-3aa5-460f-9a95-435115b3777c",
+      "name": "Alerts Found?"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a spare parts planning assistant for Zebra Technologies EMEA equipment maintenance operations\n\nToday's date: {{ $json.report_date }}\nTotal parts monitored: {{ $json.total_parts_monitored }}\nAlerts triggered: {{ $json.alerts_count }}\nCritical/Stockout items: {{ $json.critical_count }}\nDepots affected: {{ $json.depots_affected.join(', ') }}\nEstimated total reorder cost: €{{ $json.total_estimated_reorder_cost }}\n\nHere are the flagged parts:\n{{ JSON.stringify($json.alerts, null, 2) }}\n\nWrite a concise daily stock signal digest email for the depot planning team. Structure it as:\n\n1. A 2-sentence executive summary with the most urgent finding.\n2. A \"Critical Actions Required\" section listing any STOCKOUT or CRITICAL parts with specific recommended actions (order quantity, estimated cost, which depot).\n3. A \"Watch List\" section for WARNING and WATCH items, in a brief table format.\n4. A closing line noting total monitored parts and that all other items are within normal levels.\n\nKeep the tone professional but direct. Use bullet points. Include specific numbers. The audience is supply chain planners who need to act quickly.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        832,
+        -192
+      ],
+      "id": "d3a0a569-2f72-4299-9ded-2d9366ecbea7",
+      "name": "AI Summary Generator",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "batteromar@gmail.com",
+        "subject": "⚠️ Stock Monitor Failed — Google Sheets read error",
+        "message": "==<html><body style=\"margin:0;padding:0;background:#F3F4F6;font-family:Arial,Helvetica,sans-serif;\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#F3F4F6;padding:24px 0;\"><tr><td align=\"center\"><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#FFFFFF;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);\"><tr><td style=\"background:#991B1B;padding:20px 24px;\"><div style=\"font-size:20px;font-weight:700;color:#FFFFFF;\">⚠️ Workflow Error</div><div style=\"font-size:12px;color:#FCA5A5;margin-top:4px;\">Stock Signal Monitor • EMEA Depot Planning</div></td></tr><tr><td style=\"padding:24px;\"><div style=\"background:#FEF2F2;border:1px solid #FECACA;border-radius:6px;padding:16px;margin-bottom:16px;\"><div style=\"font-size:14px;font-weight:700;color:#991B1B;margin-bottom:8px;\">Google Sheets Read Failed</div><div style=\"font-size:13px;color:#374151;line-height:1.6;\">The daily stock signal workflow could not read inventory data from the spreadsheet. The scheduled alert digest was not generated.</div></div><div style=\"font-size:13px;color:#374151;line-height:1.6;\"><strong>Error details:</strong><br><code style=\"background:#F3F4F6;padding:2px 6px;border-radius:3px;font-size:12px;\">{{ $json.error?.message || 'Unknown error — check n8n execution log' }}</code></div><div style=\"margin-top:16px;padding-top:16px;border-top:1px solid #E5E7EB;font-size:13px;color:#374151;\"><strong>Recommended actions:</strong><br>• Check that the Google Sheets credential is still authorized<br>• Verify the spreadsheet has not been deleted or moved<br>• Check the n8n execution log for full error details</div></td></tr><tr><td style=\"padding:16px 24px;background:#F9FAFB;border-top:1px solid #E5E7EB;\"><div style=\"font-size:11px;color:#9CA3AF;\">Automated alert from n8n Stock Signal Monitor</div></td></tr></table></td></tr></table></body></html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        160
+      ],
+      "id": "c16e45b0-3411-45e6-8db4-3e1a803f38e4",
+      "name": "Notify: Data Source Error",
+      "webhookId": "b52e5cef-2afb-4113-b68a-d865ce664d8e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "sYokZ8hStWoPB9sT",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "batteromar@gmail.com",
+        "subject": "⚠️ Stock Monitor — AI Analysis Failed — {{ $('Calculate Stock Signals').item.json.report_date }}",
+        "message": "==<html><body style=\"margin:0;padding:0;background:#F3F4F6;font-family:Arial,Helvetica,sans-serif;\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#F3F4F6;padding:24px 0;\"><tr><td align=\"center\"><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#FFFFFF;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);\"><tr><td style=\"background:#92400E;padding:20px 24px;\"><div style=\"font-size:20px;font-weight:700;color:#FFFFFF;\">⚠️ AI Summary Unavailable</div><div style=\"font-size:12px;color:#FDE68A;margin-top:4px;\">Stock Signal Monitor • {{ $('Calculate Stock Signals').item.json.report_date }}</div></td></tr><tr><td style=\"padding:24px;\"><div style=\"background:#FFF7ED;border:1px solid #FED7AA;border-radius:6px;padding:16px;margin-bottom:16px;\"><div style=\"font-size:14px;font-weight:700;color:#92400E;margin-bottom:8px;\">AI analysis could not be generated</div><div style=\"font-size:13px;color:#374151;line-height:1.6;\">The Anthropic API call failed. The raw alert data is included below so the planning team can still act on today's signals.</div></div><div style=\"background:#FEF2F2;border:1px solid #FECACA;border-radius:6px;padding:12px;margin-bottom:16px;\"><div style=\"font-size:12px;font-weight:700;color:#991B1B;\">{{ $('Calculate Stock Signals').item.json.critical_count }} Critical/Stockout • {{ $('Calculate Stock Signals').item.json.alerts_count }} Total Alerts • {{ $('Calculate Stock Signals').item.json.depots_affected.join(', ') }}</div></div><div style=\"font-size:13px;color:#374151;line-height:1.6;\"><strong>Raw alert data:</strong><br><pre style=\"background:#F3F4F6;padding:12px;border-radius:6px;font-size:11px;overflow-x:auto;white-space:pre-wrap;\">{{ JSON.stringify($('Calculate Stock Signals').item.json.alerts, null, 2) }}</pre></div></td></tr><tr><td style=\"padding:16px 24px;background:#F9FAFB;border-top:1px solid #E5E7EB;\"><div style=\"font-size:11px;color:#9CA3AF;\">Automated fallback alert from n8n Stock Signal Monitor</div></td></tr></table></td></tr></table></body></html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1184,
+        -48
+      ],
+      "id": "dff810ca-55c3-46eb-a58e-861b2c7f5989",
+      "name": "Notify: AI Analysis Failed",
+      "webhookId": "8f13cde8-3e88-4819-a9fa-c1b657e40338",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "sYokZ8hStWoPB9sT",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Summary Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build HTML Email": {
+      "main": [
+        [
+          {
+            "node": "Send Demo Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Demo Request Form": {
+      "main": [
+        [
+          {
+            "node": "Read Inventory Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Demo Report": {
+      "main": [
+        []
+      ]
+    },
+    "Read Inventory Data": {
+      "main": [
+        [
+          {
+            "node": "Calculate Stock Signals",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify: Data Source Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Stock Signals": {
+      "main": [
+        [
+          {
+            "node": "Alerts Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alerts Found?": {
+      "main": [
+        [
+          {
+            "node": "AI Summary Generator",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Alerts — End",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Summary Generator": {
+      "main": [
+        [
+          {
+            "node": "Build HTML Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify: AI Analysis Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1
+  },
+  "versionId": "a8905e4a-6b13-4d99-b67e-078e0afece47",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4925c5fcb5f2723e2b3fd0f6f82157512703890308178c5670aad2968eea0e7e"
+  },
+  "id": "JMGBD4zZgHapMaJP",
+  "tags": []
+}
